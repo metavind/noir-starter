@@ -11,6 +11,7 @@ import initACVM, { executeCircuit, compressWitness } from '@noir-lang/acvm_js';
 import { ethers } from 'ethers'; // I'm lazy so I'm using ethers to pad my input
 //import circuit from '../../circuits/target/noirstarter.json';
 import circuit from '../../noir-ml/example_circuits/circle_fc/target/circle_fc.json';
+//import circuit from '../../test_circuits/add/target/add.json';
 import { Ptr } from '@aztec/bb.js/dest/node/types';
 
 export class NoirBrowser {
