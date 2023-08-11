@@ -9,7 +9,8 @@ import {
 } from '@aztec/bb.js/dest/browser/index.js';
 import initACVM, { executeCircuit, compressWitness } from '@noir-lang/acvm_js';
 import { ethers } from 'ethers'; // I'm lazy so I'm using ethers to pad my input
-import circuit from '../../circuits/target/noirstarter.json';
+//import circuit from '../../circuits/target/noirstarter.json';
+import circuit from '../../noir-ml/example_circuits/circle_fc/target/circle_fc.json';
 import { Ptr } from '@aztec/bb.js/dest/node/types';
 
 export class NoirBrowser {
@@ -31,6 +32,7 @@ export class NoirBrowser {
 
     this.api = await newBarretenbergApiAsync(4);
 
+    console.log(circuit.bytecode);
     const [exact, total, subgroup] = await this.api.acirGetCircuitSizes(
       this.acirBufferUncompressed,
     );
@@ -48,8 +50,11 @@ export class NoirBrowser {
 
   async generateWitness(input: any): Promise<Uint8Array> {
     const initialWitness = new Map<number, string>();
-    initialWitness.set(1, ethers.utils.hexZeroPad(`0x${input.x.toString(16)}`, 32));
-    initialWitness.set(2, ethers.utils.hexZeroPad(`0x${input.y.toString(16)}`, 32));
+    for (let i = 0; i < input.length; i++) {
+      initialWitness.set(i + 1, ethers.utils.hexZeroPad(`0x${input[i].toString(16)}`, 32));
+    }
+    
+    console.log(initialWitness);
 
     const witnessMap = await executeCircuit(this.acirBuffer, initialWitness, () => {
       throw Error('unexpected oracle');
