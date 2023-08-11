@@ -1,0 +1,3 @@
+[submodule "next-hardhat/noir-ml"]
+	path = next-hardhat/noir-ml
+	url = https://github.com/metavind/noir-ml.git
