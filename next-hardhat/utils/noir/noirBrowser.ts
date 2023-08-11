@@ -32,7 +32,6 @@ export class NoirBrowser {
 
     this.api = await newBarretenbergApiAsync(4);
 
-    console.log(circuit.bytecode);
     const [exact, total, subgroup] = await this.api.acirGetCircuitSizes(
       this.acirBufferUncompressed,
     );
@@ -50,11 +49,8 @@ export class NoirBrowser {
 
   async generateWitness(input: any): Promise<Uint8Array> {
     const initialWitness = new Map<number, string>();
-    for (let i = 0; i < input.length; i++) {
-      initialWitness.set(i + 1, ethers.utils.hexZeroPad(`0x${input[i].toString(16)}`, 32));
-    }
-    
-    console.log(initialWitness);
+    initialWitness.set(1, ethers.utils.hexZeroPad(`0x${input.x.toString(16)}`, 32));
+    initialWitness.set(2, ethers.utils.hexZeroPad(`0x${input.y.toString(16)}`, 32));
 
     const witnessMap = await executeCircuit(this.acirBuffer, initialWitness, () => {
       throw Error('unexpected oracle');

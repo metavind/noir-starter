@@ -7,8 +7,6 @@ import { NoirBrowser } from '../utils/noir/noirBrowser';
 
 import { ThreeDots } from 'react-loader-spinner';
 
-const INPUT_SIZE = 2;
-
 function Component() {
   const [input, setInput] = useState({ x: 0, y: 0});
   const [pending, setPending] = useState(false);
@@ -17,25 +15,9 @@ function Component() {
   const [noir, setNoir] = useState(new NoirBrowser());
 
   // Handles input state
-  const handleChange = (e) => {
-    const value = e.target.value;
-
-    if (value.startsWith('[') && value.endsWith(']')) {
-      try {
-        const parsedArray = JSON.parse(value);
-        
-        if (Array.isArray(parsedArray) && parsedArray.every(x => Number.isInteger(x)) && parsedArray.length === INPUT_SIZE) {
-          setInput(parsedArray);
-          return; // exit early to prevent updating state multiple times
-        }
-      } catch (error) {
-        // handle any parse errors if necessary
-      }
-    }
-    
-    // If we reach here, either input is not yet complete or not a valid array.
-    // Update the intArray state to an empty array to reflect this.
-    setInput([]);
+  const handleChange = e => {
+    e.preventDefault();
+    setInput({ ...input, [e.target.name]: e.target.value });
   };
 
   // Calculates proof
@@ -58,7 +40,6 @@ function Component() {
     // only launch if we do have an acir and a proof to verify
     if (proof) {
       try {
-        console.log(proof);
         const verification = await noir.verifyProof(proof);
         setVerification(verification);
         toast.success('Proof verified!');
@@ -76,7 +57,6 @@ function Component() {
           setVerification(false);
         }
       } catch (err) {
-        console.log(err);
         toast.error('Error verifying your proof');
       } finally {
         noir.destroy();
@@ -109,7 +89,8 @@ function Component() {
       <h1>Example starter</h1>
       <h2>This circuit checks that x and y are different</h2>
       <p>Try it!</p>
-      <input name="input" type="text" placeholder="Enter numbers in format [1, 2, 3]" onChange={handleChange} value={JSON.stringify(input)} />
+      <input name="x" type={'number'} onChange={handleChange} value={input.x} />
+      <input name="y" type={'number'} onChange={handleChange} value={input.y} />
       <button onClick={calculateProof}>Calculate proof</button>
       {pending && <ThreeDots wrapperClass="spinner" color="#000000" height={100} width={100} />}
     </div>
