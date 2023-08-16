@@ -44,18 +44,18 @@ function Component() {
         setVerification(verification);
         toast.success('Proof verified!');
 
-        const ethers = new Ethers();
-        const publicInputs = proof.slice(0, 32);
-        const slicedProof = proof.slice(32);
+        // const ethers = new Ethers();
+        // const publicInputs = proof.slice(0, 32);
+        // const slicedProof = proof.slice(32);
 
-        const ver = await ethers.contract.verify(slicedProof, [publicInputs]);
-        if (ver) {
-          toast.success('Proof verified on-chain!');
-          setVerification(true);
-        } else {
-          toast.error('Proof failed on-chain verification');
-          setVerification(false);
-        }
+        // const ver = await ethers.contract.verify(slicedProof, [publicInputs]);
+        // if (ver) {
+        //   toast.success('Proof verified on-chain!');
+        //   setVerification(true);
+        // } else {
+        //   toast.error('Proof failed on-chain verification');
+        //   setVerification(false);
+        // }
       } catch (err) {
         toast.error('Error verifying your proof');
       } finally {
